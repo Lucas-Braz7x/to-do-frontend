@@ -1,7 +1,7 @@
 'use client';
 
-import { Component, type ReactNode } from 'react';
 import { cn } from '@/src/lib/utils';
+import { Component, type ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -13,7 +13,10 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -38,7 +41,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
-      return <ErrorFallback error={this.state.error} onReset={this.handleReset} />;
+      return (
+        <ErrorFallback error={this.state.error} onReset={this.handleReset} />
+      );
     }
 
     return this.props.children;

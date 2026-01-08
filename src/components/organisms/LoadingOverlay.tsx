@@ -14,7 +14,10 @@ function createAnimationStore() {
   const notify = () => listeners.forEach((l) => l());
 
   const updateSnapshot = () => {
-    if (cachedSnapshot.visible !== visible || cachedSnapshot.shouldRender !== shouldRender) {
+    if (
+      cachedSnapshot.visible !== visible ||
+      cachedSnapshot.shouldRender !== shouldRender
+    ) {
       cachedSnapshot = { visible, shouldRender };
     }
   };
