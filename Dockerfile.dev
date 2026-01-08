@@ -1,0 +1,34 @@
+# ============================================
+# Dockerfile para desenvolvimento
+# Hot reload habilitado
+# ============================================
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instala dependências do sistema
+RUN apk add --no-cache libc6-compat
+
+# Copia arquivos de dependências
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# Instala dependências
+RUN \
+  if [ -f yarn.lock ]; then yarn ; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i ; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+# Expõe porta 3000
+EXPOSE 3000
+
+# Variáveis de ambiente
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Comando para iniciar em modo desenvolvimento
+CMD ["yarn", "dev"]
