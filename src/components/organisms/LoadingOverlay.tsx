@@ -8,29 +8,40 @@ import { useEffect, useMemo, useSyncExternalStore } from 'react';
 function createAnimationStore() {
   let visible = false;
   let shouldRender = false;
+  let cachedSnapshot = { visible, shouldRender };
   const listeners = new Set<() => void>();
 
   const notify = () => listeners.forEach((l) => l());
+
+  const updateSnapshot = () => {
+    if (cachedSnapshot.visible !== visible || cachedSnapshot.shouldRender !== shouldRender) {
+      cachedSnapshot = { visible, shouldRender };
+    }
+  };
 
   return {
     subscribe: (callback: () => void) => {
       listeners.add(callback);
       return () => listeners.delete(callback);
     },
-    getSnapshot: () => ({ visible, shouldRender }),
+    getSnapshot: () => cachedSnapshot,
     show: () => {
       shouldRender = true;
+      updateSnapshot();
       notify();
       requestAnimationFrame(() => {
         visible = true;
+        updateSnapshot();
         notify();
       });
     },
     hide: () => {
       visible = false;
+      updateSnapshot();
       notify();
       setTimeout(() => {
         shouldRender = false;
+        updateSnapshot();
         notify();
       }, 200);
     },
