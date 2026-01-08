@@ -7,7 +7,7 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from 'react';
-import type { ZodSchema, ZodError } from 'zod';
+import type { ZodError, ZodSchema } from 'zod';
 
 interface UseFormOptions<T> {
   initialValues: T;
@@ -52,23 +52,6 @@ export function useForm<T extends object>({
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validateField = useCallback(
-    (field: keyof T, value: T[keyof T]): string | undefined => {
-      if (!schema) return undefined;
-
-      const result = schema.safeParse({ ...values, [field]: value });
-      if (!result.success) {
-        const fieldError = result.error.issues.find(
-          (issue) => issue.path[0] === field
-        );
-        return fieldError?.message;
-      }
-
-      return undefined;
-    },
-    [schema, values]
-  );
-
   const validate = useCallback((): boolean => {
     if (!schema) return true;
 
@@ -96,7 +79,8 @@ export function useForm<T extends object>({
       // Limpa o erro do campo ao alterar
       setErrors((prev) => {
         if (prev[name as keyof T]) {
-          const { [name as keyof T]: _, ...rest } = prev;
+          const { [name as keyof T]: _removed, ...rest } = prev;
+          void _removed;
           return rest as Partial<Record<keyof T, string>>;
         }
         return prev;
@@ -110,7 +94,8 @@ export function useForm<T extends object>({
       setValues((prev) => ({ ...prev, [field]: value }));
       setErrors((prev) => {
         if (prev[field]) {
-          const { [field]: _, ...rest } = prev;
+          const { [field]: _removed, ...rest } = prev;
+          void _removed;
           return rest as Partial<Record<keyof T, string>>;
         }
         return prev;
