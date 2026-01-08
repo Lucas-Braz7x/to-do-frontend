@@ -1,7 +1,7 @@
-[ ] - Página de Login
-[ ] - Página de Cadastro
-[ ] - Página protegida com a lista de tarefas
-[ ] - Formulário de criação e edição
+[x] - Página de Login
+[x] - Página de Cadastro
+[x] - Página protegida com a lista de tarefas
+[x] - Formulário de criação e edição
 [ ] - Testes
 [ ] - Containers
 [ ] - CI/CD
@@ -10,5 +10,5 @@
 
 Tech
 
-[ ] - Nextjs
-[ ] - Jest?
+[x] - Nextjs
+[x] - Jest?
