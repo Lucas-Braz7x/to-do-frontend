@@ -7,7 +7,7 @@ import {
   useLoading,
   setLoadingCallbacks,
 } from '../contexts/LoadingContext';
-import { LoadingOverlay } from '@/src/components/organisms/LoadingOverlay';
+import { ErrorBoundary, LoadingOverlay } from '@/src/components/organisms';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -28,11 +28,13 @@ function LoadingInitializer({ children }: { children: React.ReactNode }) {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <LoadingProvider>
-      <LoadingInitializer>
-        <AuthProvider>{children}</AuthProvider>
-        <LoadingOverlay />
-      </LoadingInitializer>
-    </LoadingProvider>
+    <ErrorBoundary>
+      <LoadingProvider>
+        <LoadingInitializer>
+          <AuthProvider>{children}</AuthProvider>
+          <LoadingOverlay />
+        </LoadingInitializer>
+      </LoadingProvider>
+    </ErrorBoundary>
   );
 }
