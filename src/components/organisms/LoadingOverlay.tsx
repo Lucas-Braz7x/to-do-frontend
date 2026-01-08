@@ -1,30 +1,60 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useLoading } from '@/src/application/contexts/LoadingContext';
 import { cn } from '@/src/lib/utils';
+import { useEffect, useMemo, useSyncExternalStore } from 'react';
+
+// Factory para criar store de animação
+function createAnimationStore() {
+  let visible = false;
+  let shouldRender = false;
+  const listeners = new Set<() => void>();
+
+  const notify = () => listeners.forEach((l) => l());
+
+  return {
+    subscribe: (callback: () => void) => {
+      listeners.add(callback);
+      return () => listeners.delete(callback);
+    },
+    getSnapshot: () => ({ visible, shouldRender }),
+    show: () => {
+      shouldRender = true;
+      notify();
+      requestAnimationFrame(() => {
+        visible = true;
+        notify();
+      });
+    },
+    hide: () => {
+      visible = false;
+      notify();
+      setTimeout(() => {
+        shouldRender = false;
+        notify();
+      }, 200);
+    },
+  };
+}
 
 export function LoadingOverlay() {
   const { isLoading } = useLoading();
-  const [visible, setVisible] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
+
+  const store = useMemo(() => createAnimationStore(), []);
+
+  const { visible, shouldRender } = useSyncExternalStore(
+    store.subscribe,
+    store.getSnapshot,
+    store.getSnapshot
+  );
 
   useEffect(() => {
     if (isLoading) {
-      setShouldRender(true);
-      // Pequeno delay para a animação de entrada funcionar
-      requestAnimationFrame(() => {
-        setVisible(true);
-      });
+      store.show();
     } else {
-      setVisible(false);
-      // Aguarda a animação de saída antes de remover do DOM
-      const timer = setTimeout(() => {
-        setShouldRender(false);
-      }, 200);
-      return () => clearTimeout(timer);
+      store.hide();
     }
-  }, [isLoading]);
+  }, [isLoading, store]);
 
   if (!shouldRender) return null;
 
