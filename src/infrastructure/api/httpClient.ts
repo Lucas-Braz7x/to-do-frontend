@@ -62,8 +62,14 @@ async function request<T>(
 
       if (response.status === 401) {
         tokenStorage.removeToken();
+        // Não redireciona se já estiver em páginas de autenticação
+        // para permitir que o erro de credenciais inválidas seja exibido
         if (typeof window !== 'undefined') {
+          const isAuthPage = window.location.pathname === '/login' || 
+                             window.location.pathname === '/register';
+          if (!isAuthPage) {
           window.location.href = '/login';
+          }
         }
       }
 
