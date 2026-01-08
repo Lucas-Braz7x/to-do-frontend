@@ -62,7 +62,11 @@ describe('Spinner', () => {
     it('should have borders with correct colors', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('border-2', 'border-slate-200', 'border-t-indigo-600');
+      expect(spinner).toHaveClass(
+        'border-2',
+        'border-slate-200',
+        'border-t-indigo-600'
+      );
     });
   });
 
@@ -76,7 +80,11 @@ describe('Spinner', () => {
     it('should keep default classes when adding custom className', () => {
       render(<Spinner className="custom-class" />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('animate-spin', 'rounded-full', 'custom-class');
+      expect(spinner).toHaveClass(
+        'animate-spin',
+        'rounded-full',
+        'custom-class'
+      );
     });
   });
 });

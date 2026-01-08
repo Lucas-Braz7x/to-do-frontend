@@ -5,7 +5,9 @@ describe('Button', () => {
   describe('Rendering', () => {
     it('should render the button with correct text', () => {
       render(<Button>Click here</Button>);
-      expect(screen.getByRole('button', { name: 'Click here' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Click here' })
+      ).toBeInTheDocument();
     });
 
     it('should render with primary variant by default', () => {
@@ -91,23 +93,31 @@ describe('Button', () => {
     it('should call onClick when clicked', () => {
       const handleClick = jest.fn();
       render(<Button onClick={handleClick}>Click</Button>);
-      
+
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('should not call onClick when disabled', () => {
       const handleClick = jest.fn();
-      render(<Button disabled onClick={handleClick}>Click</Button>);
-      
+      render(
+        <Button disabled onClick={handleClick}>
+          Click
+        </Button>
+      );
+
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
     });
 
     it('should not call onClick when isLoading is true', () => {
       const handleClick = jest.fn();
-      render(<Button isLoading onClick={handleClick}>Click</Button>);
-      
+      render(
+        <Button isLoading onClick={handleClick}>
+          Click
+        </Button>
+      );
+
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
     });
@@ -121,7 +131,11 @@ describe('Button', () => {
     });
 
     it('should accept native HTML attributes', () => {
-      render(<Button type="submit" data-testid="submit-btn">Submit</Button>);
+      render(
+        <Button type="submit" data-testid="submit-btn">
+          Submit
+        </Button>
+      );
       const button = screen.getByTestId('submit-btn');
       expect(button).toHaveAttribute('type', 'submit');
     });

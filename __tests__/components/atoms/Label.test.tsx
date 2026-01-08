@@ -66,7 +66,11 @@ describe('Label', () => {
     });
 
     it('should accept native HTML attributes', () => {
-      render(<Label data-testid="label-test" id="my-label">Test</Label>);
+      render(
+        <Label data-testid="label-test" id="my-label">
+          Test
+        </Label>
+      );
       const label = screen.getByTestId('label-test');
       expect(label).toHaveAttribute('id', 'my-label');
     });

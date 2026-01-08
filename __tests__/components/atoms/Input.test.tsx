@@ -15,7 +15,9 @@ describe('Input', () => {
 
     it('should render with placeholder', () => {
       render(<Input placeholder="Enter your email" />);
-      expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Enter your email')
+      ).toBeInTheDocument();
     });
   });
 
@@ -70,15 +72,17 @@ describe('Input', () => {
     it('should call onChange when typing', () => {
       const handleChange = jest.fn();
       render(<Input onChange={handleChange} data-testid="input" />);
-      
-      fireEvent.change(screen.getByTestId('input'), { target: { value: 'test' } });
+
+      fireEvent.change(screen.getByTestId('input'), {
+        target: { value: 'test' },
+      });
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
 
     it('should update value when typing', () => {
       render(<Input data-testid="input" />);
       const input = screen.getByTestId('input') as HTMLInputElement;
-      
+
       fireEvent.change(input, { target: { value: 'new value' } });
       expect(input.value).toBe('new value');
     });
@@ -86,7 +90,7 @@ describe('Input', () => {
     it('should call onFocus when focused', () => {
       const handleFocus = jest.fn();
       render(<Input onFocus={handleFocus} data-testid="input" />);
-      
+
       fireEvent.focus(screen.getByTestId('input'));
       expect(handleFocus).toHaveBeenCalledTimes(1);
     });
@@ -94,7 +98,7 @@ describe('Input', () => {
     it('should call onBlur when blurred', () => {
       const handleBlur = jest.fn();
       render(<Input onBlur={handleBlur} data-testid="input" />);
-      
+
       fireEvent.blur(screen.getByTestId('input'));
       expect(handleBlur).toHaveBeenCalledTimes(1);
     });
