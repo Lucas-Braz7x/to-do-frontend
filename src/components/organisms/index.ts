@@ -1,3 +1,4 @@
+export { ErrorBoundary } from './ErrorBoundary';
 export { LoadingOverlay } from './LoadingOverlay';
 export { LoginForm } from './LoginForm';
 export { RegisterForm } from './RegisterForm';
